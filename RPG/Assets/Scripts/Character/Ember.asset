@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c03a3ae14b99d14f9afaae845269257, type: 3}
+  m_Name: Ember
+  m_EditorClassIdentifier: 
+  id: 0
+  maxLife: 30
+  names: Ember
+  maxMana: 30
+  level: 1
+  experience: 0
+  alive: 1
+  speed: 23
+  attack: 22
+  defend: 12
+  strenge: 5
+  agility: 3
+  intelligence: 3
+  fireResitance: 0
+  waterResitance: 0
+  earthResitance: 0
+  windResitance: 0
+  lightResitance: 0
+  shadowResitance: 0
