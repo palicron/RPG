@@ -15,7 +15,7 @@ public class CombatManager : MonoBehaviour {
 	public GameObject[] enemipre;
 	public GameObject[] enemis;
 	public UIManager uiMan;
-	public GameObject[] selectettargetindic;
+	
 	[SerializeField]
 	private int SelectPost = 0;
 	[SerializeField]
@@ -170,19 +170,19 @@ public class CombatManager : MonoBehaviour {
 	{
 		return players[SelectPost];
 	}
-	public ArrayList getEnemy(int n)
+	public ArrayList getEnemy(int pos,int numberTargets)
 	{
 		ArrayList g = new ArrayList();
-		if(n==-1 || n>numberofEnemys) 
+		if(numberTargets == -1 || numberTargets > numberofEnemys) 
 		{
 			for(int i =0;i<enemis.Length;i++)
 			{
 				g.Add(enemis[i]);
 			}
 		}
-		else if(n==1)
+		else if(numberTargets == 1)
 		{
-			g.Add(enemis[EnemySelcPost]);
+			g.Add(enemis[pos]);
 		}
 		return g;
 	}
@@ -243,4 +243,5 @@ public class CombatManager : MonoBehaviour {
 		
 		
 	}
+
 }

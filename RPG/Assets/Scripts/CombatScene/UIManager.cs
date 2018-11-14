@@ -18,12 +18,17 @@ public class UIManager : MonoBehaviour {
 	private ArrayList attackenemts;
 	private bool selectingenemy = false;
 	private int curTurn=1;
+	private int actualpos = 0;
 
-
+	private void Start()
+	{
+		attackenemts = new ArrayList();
+		setfirtenemy();
+	}
 	private void Update()
 	{
 		bool a = Input.GetKeyDown(KeyCode.A);
-		attackenemts = new ArrayList();
+	
 		if (!Input.anyKey)
 			return;
 		if (Input.GetKeyDown(KeyCode.UpArrow) && !selectingenemy)
@@ -37,9 +42,7 @@ public class UIManager : MonoBehaviour {
 		{
 			selectingenemy = true;
 			selectetCharacter = cm.getplayer();
-			Character t = selectetCharacter.GetComponent<Character>();
-			attackenemts = cm.getEnemy(t.basicattack.numberOfEnemys);
-			cm.selectettargetindic[cm.SelectPost1].SetActive(true);
+			getSelectingEnemy(actualpos, selectetCharacter.GetComponent<Character>().basicattack.numberOfEnemys);
 			a = false;
 		}
 		else if (Input.GetKeyDown(KeyCode.B) && menulvl == 1 && !selectingenemy)
@@ -158,45 +161,39 @@ public class UIManager : MonoBehaviour {
 	{
 		if(Input.GetKeyDown(KeyCode.Y))
 		{
+			
 			Character c = selectetCharacter.GetComponent<Character>();
 			int pdmg = c.Attack + c.basicattack.physicDmg;
-			attackenemts = cm.getEnemy(1);
+			getSelectingEnemy(actualpos,c.basicattack.numberOfEnemys);
 			Action o = new Action(attackenemts, selectetCharacter, pdmg, 0, 0, 0, 0, 0, 0,0);
 			c.currentAction = o;
 			cm.queTurn(c);
 			cm.advanceselct(1);
 			selectetCharacter = cm.getplayer();
 			selectingenemy = false;
+			setfirtenemy();
 			if (curTurn == cm.NumberofPlayer)
 			{
 				Debug.Log("turno termino");
 				curTurn = 1;
 				cm.createcombatqueve();
+				resetturn();
 			}
 			else
 				curTurn++;
 		}
 		if (Input.GetKeyDown(KeyCode.V))
 		{
-			cm.advanceselct(1);
-			selectetCharacter = cm.getplayer();
-			if (cm.SelectPost1-1<0)
-				cm.selectettargetindic[cm.selectettargetindic.Length-1].SetActive(false);
-			else
-				cm.selectettargetindic[cm.SelectPost1-1].SetActive(false);
+			advanceEnemy(1);
+			getSelectingEnemy(actualpos, selectetCharacter.GetComponent<Character>().basicattack.numberOfEnemys);
 
-			cm.selectettargetindic[cm.SelectPost1].SetActive(true);
 		}
 		if (Input.GetKeyDown(KeyCode.C))
 		{
-			cm.advanceselct(-1);
-			selectetCharacter = cm.getplayer();
-			if (cm.SelectPost1 + 1 > cm.selectettargetindic.Length)
-				cm.selectettargetindic[0].SetActive(false);
-			else
-				cm.selectettargetindic[cm.SelectPost1 + 1].SetActive(false);
 
-			cm.selectettargetindic[cm.SelectPost1].SetActive(true);
+			advanceEnemy(-1);
+			getSelectingEnemy(actualpos, selectetCharacter.GetComponent<Character>().basicattack.numberOfEnemys);
+
 		}
 
 	}
@@ -220,5 +217,77 @@ public class UIManager : MonoBehaviour {
 		}
 		combatmenucontainer.SetActive(false);
 
+	}
+
+
+	private void getSelectingEnemy(int pos,int numTargets)
+	{
+		
+		foreach (GameObject x in attackenemts)
+		{
+			x.GetComponent<Character>().pointer.SetActive(false);
+		}
+
+		attackenemts = cm.getEnemy(pos, numTargets);
+
+		foreach (GameObject x in attackenemts)
+		{
+			x.GetComponent<Character>().pointer.SetActive(true);
+		}
+		
+	}
+
+	private void setfirtenemy()
+	{
+		GameObject[] x = cm.enemis;
+	
+		for(int i=0;i<x.Length;i++)
+		{
+			if(x[i]!=null)
+			{
+				actualpos = i;
+				break;
+			}
+		}
+		
+	}
+
+	private void advanceEnemy(int dir )
+	{
+		GameObject[] x = cm.enemis;
+		bool y = false;
+
+		if (dir == 1)
+		{
+			int i = actualpos + 1;
+			while (!y)
+			{
+				if (i > x.Length-1)
+					i = 0;
+				if (x[i] != null)
+					y = true;
+				else
+					i++;
+			}
+			actualpos = i;
+		}
+		else
+		{
+			int i = actualpos - 1;
+			while (!y)
+			{
+				if (i < 0)
+					i = x.Length-1;
+				if (x[i] != null)
+					y = true;
+				else
+					i--;
+			}
+			actualpos = i;
+		}
+	}
+	public void resetturn()
+	{
+		disbleCombatMenu();
 	}
 }

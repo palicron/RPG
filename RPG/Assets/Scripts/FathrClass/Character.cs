@@ -33,6 +33,7 @@ public abstract class Character : MonoBehaviour {
 	public Action currentAction = null;
 	public CharacterStats initStats;
 	public AttackAction basicattack;
+	public GameObject pointer;
 	public void init()
 	{
 		if(!starCount)
@@ -56,7 +57,7 @@ public abstract class Character : MonoBehaviour {
 
 	public void takeDmg(Action dmg)
 	{
-		currentLife = dmg.physicDmg - this.defend;
+		currentLife -= dmg.physicDmg - this.defend;
 	}
 
 	public int gainExp(int gainExp)
